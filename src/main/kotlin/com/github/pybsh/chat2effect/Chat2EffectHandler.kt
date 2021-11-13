@@ -1,21 +1,23 @@
 package com.github.pybsh.chat2effect
 
-import org.bukkit.Bukkit
+import net.kyori.adventure.text.Component.text
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit.getOnlinePlayers
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import java.awt.Color
+import kotlin.random.Random
 
 object Chat2EffectHandler {
     private fun getInstance(): JavaPlugin {
         return Chat2EffectPluginMain.instance
     }
 
-    fun handle(msg: String){
+    fun handle(msg: String, user: String){
         var type: PotionEffectType? = null
 
-        val m = msg.replace(" ","")
-        when(m){
+        when(msg.replace(" ","")){
             "신속" -> type = PotionEffectType.SPEED
             "구속", "감속" -> type = PotionEffectType.SLOW
             "성급함" -> type = PotionEffectType.FAST_DIGGING
@@ -27,7 +29,6 @@ object Chat2EffectHandler {
             "화염저항" -> type = PotionEffectType.FIRE_RESISTANCE
             "수중호흡" -> type = PotionEffectType.WATER_BREATHING
             "투명" -> type = PotionEffectType.INVISIBILITY
-            "실명" -> type = PotionEffectType.BLINDNESS
             "야간투시","야투" -> type = PotionEffectType.NIGHT_VISION
             "허기", "배고픔" -> type = PotionEffectType.HUNGER
             "나약함" -> type = PotionEffectType.WEAKNESS
@@ -42,8 +43,11 @@ object Chat2EffectHandler {
         }
 
         if(type == null) return
-        Bukkit.getServer().scheduler.scheduleSyncDelayedTask(getInstance(), {
-            getOnlinePlayers().forEach { it.addPotionEffect(PotionEffect(type, 600, 0, true)) }
+        getInstance().server.scheduler.scheduleSyncDelayedTask(getInstance(), {
+            getOnlinePlayers().forEach {
+                it.addPotionEffect(PotionEffect(type, 600, 0, true, false))
+                it.sendMessage(text("${ChatColor.of(Color(Random.nextInt(0xFF0000)))}${user}${ChatColor.WHITE}: $msg"))
+            }
         }, 0L)
     }
 

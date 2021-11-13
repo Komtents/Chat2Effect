@@ -20,12 +20,7 @@ import com.github.philippheuer.credentialmanager.domain.OAuth2Credential
 import com.github.twitch4j.TwitchClient
 import com.github.twitch4j.TwitchClientBuilder
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent
-import net.kyori.adventure.text.Component.text
-import net.md_5.bungee.api.ChatColor
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
-import java.awt.Color
-import kotlin.random.Random.Default.nextInt
 
 /***
  * @author PyBsh
@@ -42,7 +37,7 @@ class Chat2EffectPluginMain : JavaPlugin() {
 
     override fun onEnable() {
         instance = this
-        logger.info("by PyBsh. For Celebrate Komq 150k Subs!")
+        logger.info("by PyBsh.")
 
         val credential = OAuth2Credential("twitch",Chat2EffectEnv.oauth)
 
@@ -55,13 +50,10 @@ class Chat2EffectPluginMain : JavaPlugin() {
             .withDefaultAuthToken(credential)
             .build()
 
-        client.chat.joinChannel("pybsh")
+        client.chat.joinChannel("twitchkoma")
 
         client.eventManager.onEvent(ChannelMessageEvent::class.java) { event ->
-            Bukkit.getOnlinePlayers().forEach {
-                it.sendMessage(text("${ChatColor.of(Color(nextInt(0xFF0000)))}${event.user.name}${ChatColor.WHITE}: ${event.message}"))
-                Chat2EffectHandler.handle(event.message)
-            }
+            Chat2EffectHandler.handle(event.message, event.user.name)
         }
     }
 
