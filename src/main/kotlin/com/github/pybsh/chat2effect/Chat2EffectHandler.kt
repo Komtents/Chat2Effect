@@ -24,7 +24,7 @@ object Chat2EffectHandler {
             "채굴피로" -> type = PotionEffectType.SLOW_DIGGING
             "힘" -> type = PotionEffectType.INCREASE_DAMAGE
             "도약","점프강화","점강" -> type = PotionEffectType.JUMP
-            "재생", "회복" -> type = PotionEffectType.HEAL
+            "재생", "회복" -> type = PotionEffectType.REGENERATION
             "저항" -> type = PotionEffectType.DAMAGE_RESISTANCE
             "화염저항" -> type = PotionEffectType.FIRE_RESISTANCE
             "수중호흡" -> type = PotionEffectType.WATER_BREATHING
@@ -45,7 +45,15 @@ object Chat2EffectHandler {
         if(type == null) return
         getInstance().server.scheduler.scheduleSyncDelayedTask(getInstance(), {
             getOnlinePlayers().forEach {
-                it.addPotionEffect(PotionEffect(type, 600, 0, true, false))
+                val potion = it.getPotionEffect(type)
+                if(potion != null){
+                    val amp = potion.amplifier
+                    it.addPotionEffect(PotionEffect(type, 60, amp+1, false, false))
+                }
+                else{
+                    it.addPotionEffect(PotionEffect(type, 60, 0, false, false))
+                }
+
                 it.sendMessage(text("${ChatColor.of(Color(Random.nextInt(0xFF0000)))}${user}${ChatColor.WHITE}: $msg"))
             }
         }, 0L)

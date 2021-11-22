@@ -1,1 +1,1 @@
-rootProject.name = "komq150k"
+rootProject.name = "Chat2Effect"

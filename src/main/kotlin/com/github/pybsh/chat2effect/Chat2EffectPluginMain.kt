@@ -50,7 +50,7 @@ class Chat2EffectPluginMain : JavaPlugin() {
             .withDefaultAuthToken(credential)
             .build()
 
-        client.chat.joinChannel("twitchkoma")
+        client.chat.joinChannel("twitchkoma") // <- Edit Here!!
 
         client.eventManager.onEvent(ChannelMessageEvent::class.java) { event ->
             Chat2EffectHandler.handle(event.message, event.user.name)
