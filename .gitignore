@@ -10,5 +10,3 @@ build
 !gradle-wrapper.properties
 # Server Files
 .server
-#Env
-src/main/kotlin/com/github/pybsh/chat2effect/Chat2EffectEnv.kt

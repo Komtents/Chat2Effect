@@ -1,10 +1,10 @@
 name: $pluginName
 main: $pluginMain
-api-version: "1.17"
+api-version: "1.18"
 version: $version
 libraries:
-  - io.github.monun:kommand:2.6.6
-  - io.github.monun:tap:4.1.9
+  - io.github.monun:kommand:2.8.0
+  - io.github.monun:tap:4.3.0
   - com.github.twitch4j:twitch4j:1.5.0
   - com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0
 # 이거 존나 편함

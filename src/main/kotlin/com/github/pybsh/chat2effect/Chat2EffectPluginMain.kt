@@ -16,22 +16,20 @@
 
 package com.github.pybsh.chat2effect
 
-import com.github.philippheuer.credentialmanager.domain.OAuth2Credential
-import com.github.twitch4j.TwitchClient
-import com.github.twitch4j.TwitchClientBuilder
-import com.github.twitch4j.chat.events.channel.ChannelMessageEvent
 import org.bukkit.plugin.java.JavaPlugin
+import com.github.pybsh.chat2effect.Chat2EffectEnv.oauth
+import com.github.pybsh.chat2effect.Chat2EffectEnv.clientId
+import com.github.pybsh.chat2effect.Chat2EffectEnv.clientSecret
+import com.github.pybsh.chat2effect.Chat2EffectEnv.channelName
+import org.bukkit.ChatColor
 
 /***
  * @author PyBsh
  */
 
 class Chat2EffectPluginMain : JavaPlugin() {
-
     companion object {
         lateinit var instance: Chat2EffectPluginMain
-            private set
-        lateinit var client: TwitchClient
             private set
     }
 
@@ -39,25 +37,18 @@ class Chat2EffectPluginMain : JavaPlugin() {
         instance = this
         logger.info("by PyBsh.")
 
-        val credential = OAuth2Credential("twitch",Chat2EffectEnv.oauth)
+        this.saveDefaultConfig()
 
-        client = TwitchClientBuilder.builder()
-            .withClientId(Chat2EffectEnv.clientId)
-            .withClientSecret(Chat2EffectEnv.clientSecret)
-            .withEnableChat(true)
-            .withEnableHelix(true)
-            .withChatAccount(credential)
-            .withDefaultAuthToken(credential)
-            .build()
-
-        client.chat.joinChannel("twitchkoma") // <- Edit Here!!
-
-        client.eventManager.onEvent(ChannelMessageEvent::class.java) { event ->
-            Chat2EffectHandler.handle(event.message, event.user.name)
+        if(oauth.isNullOrBlank() || clientId.isNullOrBlank() || clientId.isNullOrBlank() || clientSecret.isNullOrBlank() || channelName.isNullOrBlank()){
+            logger.info("${ChatColor.RED} CONFIG IS NOT SET. Chat2Effect Disabled.")
+            this.server.pluginManager.disablePlugin(this)
+        }
+        else{
+            Chat2EffectSetup.setup()
         }
     }
 
     override fun onDisable() {
-        client.close()
+
     }
 }
