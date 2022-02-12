@@ -14,8 +14,6 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.1-R0.1-SNAPSHOT")
     compileOnly("io.github.monun:tap-api:4.3.0")
     compileOnly("io.github.monun:kommand-api:2.8.0")
-    compileOnly("com.github.twitch4j:twitch4j:1.5.0")
-    compileOnly("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0")
 }
 
 tasks {

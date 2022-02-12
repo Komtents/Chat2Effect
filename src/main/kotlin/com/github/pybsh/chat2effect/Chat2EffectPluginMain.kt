@@ -17,11 +17,6 @@
 package com.github.pybsh.chat2effect
 
 import org.bukkit.plugin.java.JavaPlugin
-import com.github.pybsh.chat2effect.Chat2EffectEnv.oauth
-import com.github.pybsh.chat2effect.Chat2EffectEnv.clientId
-import com.github.pybsh.chat2effect.Chat2EffectEnv.clientSecret
-import com.github.pybsh.chat2effect.Chat2EffectEnv.channelName
-import org.bukkit.ChatColor
 
 /***
  * @author PyBsh
@@ -36,16 +31,7 @@ class Chat2EffectPluginMain : JavaPlugin() {
     override fun onEnable() {
         instance = this
         logger.info("by PyBsh.")
-
-        this.saveDefaultConfig()
-
-        if(oauth.isNullOrBlank() || clientId.isNullOrBlank() || clientId.isNullOrBlank() || clientSecret.isNullOrBlank() || channelName.isNullOrBlank()){
-            logger.info("${ChatColor.RED} CONFIG IS NOT SET. Chat2Effect Disabled.")
-            this.server.pluginManager.disablePlugin(this)
-        }
-        else{
-            Chat2EffectSetup.setup()
-        }
+        server.pluginManager.registerEvents(Chat2EffectListener(), this)
     }
 
     override fun onDisable() {

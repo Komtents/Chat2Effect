@@ -19,6 +19,7 @@ package com.github.pybsh.chat2effect
 import net.kyori.adventure.text.Component.text
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit.getOnlinePlayers
+import org.bukkit.GameMode
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -62,6 +63,8 @@ object Chat2EffectHandler {
         if(type == null) return
         getInstance().server.scheduler.scheduleSyncDelayedTask(getInstance(), {
             getOnlinePlayers().forEach {
+                if(it.gameMode == GameMode.SPECTATOR) return@forEach
+
                 val potion = it.getPotionEffect(type)
                 if(potion != null){
                     val amp = potion.amplifier
