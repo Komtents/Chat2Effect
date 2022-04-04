@@ -17,14 +17,13 @@
 package com.github.pybsh.chat2effect
 
 import net.kyori.adventure.text.Component.text
-import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit.getOnlinePlayers
+import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import java.awt.Color
-import kotlin.random.Random
+import kotlin.random.Random.Default.nextInt
 
 object Chat2EffectHandler {
     private fun getInstance(): JavaPlugin {
@@ -57,24 +56,26 @@ object Chat2EffectHandler {
             "돌고래","돌고래의가호" -> type = PotionEffectType.DOLPHINS_GRACE
             "흉조" -> type = PotionEffectType.BAD_OMEN
             "마을의영웅" -> type = PotionEffectType.HERO_OF_THE_VILLAGE
-            "공중부양" -> type = PotionEffectType.LEVITATION
+            "생명력강화" -> type = PotionEffectType.HEALTH_BOOST
+            "흡수" -> type = PotionEffectType.ABSORPTION
+            "실명" -> type = PotionEffectType.BLINDNESS
         }
 
         if(type == null) return
         getInstance().server.scheduler.scheduleSyncDelayedTask(getInstance(), {
             getOnlinePlayers().forEach {
-                if(it.gameMode == GameMode.SPECTATOR) return@forEach
-
                 val potion = it.getPotionEffect(type)
                 if(potion != null){
+                    it.sendMessage(text("${ChatColor.getByChar(Integer.toHexString(nextInt(16)))}${user}${ChatColor.WHITE}: $msg"))
                     val amp = potion.amplifier
-                    it.addPotionEffect(PotionEffect(type, 60, amp+1, false, false))
+                    if(it.gameMode == GameMode.SPECTATOR) return@forEach
+                    it.addPotionEffect(PotionEffect(type, 200, amp+1, false, false))
                 }
                 else{
-                    it.addPotionEffect(PotionEffect(type, 60, 0, false, false))
+                    it.sendMessage(text("${ChatColor.getByChar(Integer.toHexString(nextInt(16)))}${user}${ChatColor.WHITE}: $msg"))
+                    if(it.gameMode == GameMode.SPECTATOR) return@forEach
+                    it.addPotionEffect(PotionEffect(type, 200, 0, false, false))
                 }
-
-                it.sendMessage(text("${ChatColor.of(Color(Random.nextInt(0xFF0000)))}${user}${ChatColor.WHITE}: $msg"))
             }
         }, 0L)
     }

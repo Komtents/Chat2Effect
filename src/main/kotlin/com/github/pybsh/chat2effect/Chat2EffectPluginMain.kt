@@ -25,16 +25,28 @@ import org.bukkit.plugin.java.JavaPlugin
 class Chat2EffectPluginMain : JavaPlugin() {
     companion object {
         lateinit var instance: Chat2EffectPluginMain
+        lateinit var kordClient: KordClient
             private set
     }
 
     override fun onEnable() {
         instance = this
+        kordClient = KordClient()
         logger.info("by PyBsh.")
-        server.pluginManager.registerEvents(Chat2EffectListener(), this)
+
+        this.saveDefaultConfig()
+        val token = this.config.getString("token")
+
+        if(token.isNullOrBlank()){
+            this.logger.warning("CONFIG IS NOT SET. Chat2Effect Disabled.")
+            this.server.pluginManager.disablePlugin(this)
+            return
+        }
+
+        kordClient.run(this)
     }
 
     override fun onDisable() {
-
+        kordClient.stop(this)
     }
 }

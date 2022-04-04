@@ -3,6 +3,6 @@ main: $pluginMain
 api-version: "1.18"
 version: $version
 libraries:
-  - io.github.monun:kommand:2.8.0
-  - io.github.monun:tap:4.3.0
+  - io.github.monun:tap-core:4.4.0
+  - dev.kord:kord-core:0.8.0-M12
 # 이거 존나 편함
